@@ -1,2 +1,2 @@
 # car-app
-App for DevOps course
+App for DevOps course.
