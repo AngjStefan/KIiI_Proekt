@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  database:
+    build:
+      context: ./car-app-database
+      dockerfile: Dockerfile
+    container_name: car-app-database
+    environment:
+      POSTGRES_DB: car-app-database
+      POSTGRES_USER: car-app-database
+      POSTGRES_PASSWORD: car-app-database
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./car-app-backend
+    container_name: car-app-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/car-app-database
+      SPRING_DATASOURCE_USERNAME: car-app-database
+      SPRING_DATASOURCE_PASSWORD: car-app-database
+    depends_on:
+      - database
+
+  frontend:
+    build: ./car-app-frontend
+    container_name: car-app-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  carapp-net:

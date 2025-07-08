@@ -1,0 +1,44 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  IMAGE_PREFIX: angjstefan/project
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set dynamic TAG
+        id: vars
+        run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Log in to Docker Hub
+        run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+      - name: Build and push car-app-database
+        run: |
+          docker build -t $IMAGE_PREFIX-car-app-database:latest -t $IMAGE_PREFIX-car-app-database:${{ env.TAG }} ./car-app-database
+          docker push $IMAGE_PREFIX-car-app-database:latest
+          docker push $IMAGE_PREFIX-car-app-database:${{ env.TAG }}
+
+      - name: Build and push car-app-backend
+        run: |
+          docker build -t $IMAGE_PREFIX-car-app-backend:latest -t $IMAGE_PREFIX-car-app-backend:${{ env.TAG }} ./car-app-backend
+          docker push $IMAGE_PREFIX-car-app-backend:latest
+          docker push $IMAGE_PREFIX-car-app-backend:${{ env.TAG }}
+
+      - name: Build and push car-app-frontend
+        run: |
+          docker build -t $IMAGE_PREFIX-car-app-frontend:latest -t $IMAGE_PREFIX-car-app-frontend:${{ env.TAG }} ./car-app-frontend
+          docker push $IMAGE_PREFIX-car-app-frontend:latest
+          docker push $IMAGE_PREFIX-car-app-frontend:${{ env.TAG }}
