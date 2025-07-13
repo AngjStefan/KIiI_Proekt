@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and push car-app-database
         run: |
-          docker build -t $IMAGE_PREFIX-car-app-database:latest --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api -t $IMAGE_PREFIX-car-app-database:${{ env.TAG }} --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api ./car-app-database
+          docker build -t $IMAGE_PREFIX-car-app-database:latest -t $IMAGE_PREFIX-car-app-database:${{ env.TAG }} ./car-app-database
           docker push $IMAGE_PREFIX-car-app-database:latest
           docker push $IMAGE_PREFIX-car-app-database:${{ env.TAG }}
 
@@ -39,6 +39,6 @@ jobs:
 
       - name: Build and push car-app-frontend
         run: |
-          docker build -t $IMAGE_PREFIX-car-app-frontend:latest -t $IMAGE_PREFIX-car-app-frontend:${{ env.TAG }} ./car-app-frontend
+          docker build -t $IMAGE_PREFIX-car-app-frontend:latest --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api -t $IMAGE_PREFIX-car-app-frontend:${{ env.TAG }} --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api ./car-app-frontend
           docker push $IMAGE_PREFIX-car-app-frontend:latest
           docker push $IMAGE_PREFIX-car-app-frontend:${{ env.TAG }}
