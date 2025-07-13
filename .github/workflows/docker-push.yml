@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and push car-app-database
         run: |
-          docker build -t $IMAGE_PREFIX-car-app-database:latest --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080 -t $IMAGE_PREFIX-car-app-database:${{ env.TAG }} --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080 ./car-app-database
+          docker build -t $IMAGE_PREFIX-car-app-database:latest --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api -t $IMAGE_PREFIX-car-app-database:${{ env.TAG }} --build-arg VITE_BACKEND_URL=http://car-app-backend-service.kiii.svc.cluster.local:8080/api ./car-app-database
           docker push $IMAGE_PREFIX-car-app-database:latest
           docker push $IMAGE_PREFIX-car-app-database:${{ env.TAG }}
 
