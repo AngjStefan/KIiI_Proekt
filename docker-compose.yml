@@ -27,10 +27,14 @@ services:
       - database
 
   frontend:
-    build: ./car-app-frontend
+    build: 
+      context: ./car-app-frontend
+      dockerfile: Dockerfile
+      args: 
+        VITE_BACKEND_URL: http://car-app-backend:80/api
     container_name: car-app-frontend
     ports:
-      - "5173:5173"
+      - "80:80"
     depends_on:
       - backend
 
